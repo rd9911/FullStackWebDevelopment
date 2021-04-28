@@ -1,0 +1,1 @@
+export const Name = ({value, onChange}) => <input value={value} onChange={onChange} />
