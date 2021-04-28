@@ -64,7 +64,7 @@ const App = () => {
           <div>
             Search a name <Filter value={searchingItem} onChange={handleChangeSearch} />
           </div>
-          <h2>Add new contact</h2>
+          <h2>Add a new contact</h2>
           <form onSubmit={addPerson}>
             <div>
               name <Name value={newName} onChange={handleChangeName} />
