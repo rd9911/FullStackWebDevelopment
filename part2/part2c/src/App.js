@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Filter } from './components/Filter'
 import { View } from './components/View'
+import { WeatherView } from './components/WeatherView'
 import { nanoid } from 'nanoid'
 import axios from 'axios'
 
@@ -21,15 +22,16 @@ const App = () => {
       }, [])
 
       useEffect(() => {
+        if (!capital) { return; }
         console.log(capital, searchingItem)
         axios
           .get(`http://api.weatherstack.com/current?access_key=${api_key}&query=${capital}`)
           .then( response => {
-            console.log(searchingItem)
+
             setWeatherData(weatherData.concat(response.data))
           })
           .catch((err) => console.log(err))
-      }, [])
+      }, [capital])
       
 
       const handleChangeSearch = (event) => {
@@ -68,7 +70,8 @@ const App = () => {
               : 'No results occured'}
             </div>
             <div>
-              <div>{console.log(weatherData)}</div>
+              {console.log(weatherData)}
+              {weatherData[0]  ? <WeatherView weather={weatherData[0]} /> : ''}
             </div>
           </div>
         </div>
