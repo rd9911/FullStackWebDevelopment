@@ -1,0 +1,19 @@
+{
+  "contacts": [
+    {
+      "id": "4",
+      "name": "Mary Poppendieck",
+      "number": "39-23-6423122 "
+    },
+    {
+      "id": 2,
+      "name": "Ali Nazarov",
+      "number": "890"
+    },
+    {
+      "id": 5,
+      "name": "Gera Aliev",
+      "number": "998"
+    }
+  ]
+}

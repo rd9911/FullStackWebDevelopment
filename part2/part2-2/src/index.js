@@ -2,21 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 
-const notes = [
-  {
-    id: 1,
-    content: "Hi",
-    date: new Date().toISOString(),
-    important: Math.random() < .5
-  },
-  {
-    id: 2,
-    content: "Bye",
-    date: new Date().toISOString(),
-    important: 0
-  }
-]
-
 ReactDOM.render(
     <App />,
   document.getElementById('root')
