@@ -1,11 +1,4 @@
 export const isExist = (arr, item) => {
-    arr.map(arrItem => {
-      console.log(arrItem.name, item)
-      if (arrItem.name === item) {
-        return true;
-      } else {
-        return false;
-      }
-    })
-  } 
-
+  let found = arr.find(arrItem => arrItem.name === item) ? true : false
+  return found
+  }

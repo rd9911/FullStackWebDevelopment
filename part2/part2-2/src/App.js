@@ -8,13 +8,15 @@ import { isExist } from './helperFuncs/findTheSame'
 import { nanoid } from 'nanoid';
 
 const App = () => {
-    const [ persons, setPersons ] = useState([]) 
-    const [ newName, setNewName ] = useState('')
-    const [ newNumber, setNewNumber ] = useState('')
-    const [ searchingItem, setSearchingItem ] = useState('')
-    const [ showAll, setShowAll ] = useState(true)       
+  const [ persons, setPersons ] = useState([]) 
+  const [ newName, setNewName ] = useState('')
+  const [ newNumber, setNewNumber ] = useState('')
+  const [ searchingItem, setSearchingItem ] = useState('')
+  const [ errorMessage, setErrorMessage ] = useState('')
+  const [ showAll, setShowAll ] = useState(true)       
     
 
+  
   useEffect(() => {
     contactServices
       .getAll()
@@ -24,8 +26,8 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
     if (isExist(persons, newName) === false) {
-      const newOne = { 
-        id: persons.length + 1,
+      const newOne = {
+        id: nanoid(),
         name: newName,
         number: newNumber
       }
@@ -35,6 +37,7 @@ const App = () => {
           setPersons(persons.concat(newContact))
           setNewName('')
           setNewNumber('')
+          setErrorMessage(`${newContact.name} is added.`)
         })
       } else {
         if (window.confirm(`${newName} is already exist. Thus, we can replace ${newName}'s number. Do you want to replace his number?`)) {
@@ -43,11 +46,17 @@ const App = () => {
 
           contactServices
             .update(contact.id, changedPerson)
-            .then(updatedList => {
-              setPersons(persons.map(person => person.id === contact.id ? updatedList : person))
+            .then(updatedContact => {
+              setPersons(persons.map(person => person.id === contact.id ? updatedContact : person))
               console.log(persons)
               setNewNumber('')
               setNewName('')
+              setErrorMessage(`${updatedContact.name}'s number is changed`)
+            })
+            .catch(err => {
+              if (err.response.status === 404) {
+                setErrorMessage(`${contact.name}'s data have already removed.`)
+              }
             })
         }
          
@@ -84,6 +93,7 @@ const App = () => {
   return (
     <div> 
       <h2>Phonebook</h2>
+      {errorMessage === '' ? '' : <h1>{errorMessage}</h1>}
       <div>
         Search a name <Filter value={searchingItem} onChange={handleChangeSearch} />
       </div>
