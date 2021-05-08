@@ -5,6 +5,7 @@ import { Name } from './components/Name';
 import { Number } from './components/Number';
 import contactServices from './services/contacts';
 import { isExist } from './helperFuncs/findTheSame'
+import styleFormats from './styles/styles';
 import { nanoid } from 'nanoid';
 
 const App = () => {
@@ -93,7 +94,13 @@ const App = () => {
   return (
     <div> 
       <h2>Phonebook</h2>
-      {errorMessage === '' ? '' : <h1>{errorMessage}</h1>}
+      
+        {errorMessage === '' ? '' : 
+          <div style={styleFormats.messageToUser}>
+            <h1 style={{fontColor: 'red'}}>{errorMessage}</h1>
+          </div>}
+      
+      
       <div>
         Search a name <Filter value={searchingItem} onChange={handleChangeSearch} />
       </div>
