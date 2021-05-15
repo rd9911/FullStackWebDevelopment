@@ -2,7 +2,6 @@ const { response, request } = require('express');
 const express = require('express');
 const morgan = require('morgan');
 const morganBody = require('morgan-body')
-const static = require('static')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express();
@@ -92,7 +91,7 @@ app.post('/api/persons', (req, res) => {
     res.json(note)
 })
 
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 3002
 app.listen(port, () => {
     console.log(`Server is working on ${port}`)
 })
