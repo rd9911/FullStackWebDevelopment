@@ -1,12 +1,9 @@
-let messageToUser = {
+export let messageToUser = {
     outline: 'solid red',
     fontColor: 'red',
     outlineWidth: 'auto'
 }
 
+const styleFormats = messageToUser
 
-
-
-export default {
-    messageToUser
-}
+export default styleFormats;

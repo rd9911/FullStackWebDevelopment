@@ -15,8 +15,6 @@ const App = () => {
   const [ searchingItem, setSearchingItem ] = useState('')
   const [ errorMessage, setErrorMessage ] = useState('')
   const [ showAll, setShowAll ] = useState(true)       
-    
-
   
   useEffect(() => {
     contactServices
@@ -35,7 +33,8 @@ const App = () => {
       contactServices
         .create(newOne)
         .then(newContact => {
-          setPersons(persons.concat(newContact))
+          console.log(newContact)
+          setPersons(persons.concat(newOne))
           setNewName('')
           setNewNumber('')
           setErrorMessage(`${newContact.name} is added.`)
@@ -74,15 +73,12 @@ const App = () => {
   }
 
   const handleChangeName = (event) => {
-    console.log(event.target.value);
     setNewName(event.target.value);
   }
   const handleChangeNumber = (event) => {
-    console.log(event.target.value);
     setNewNumber(event.target.value);
   }
   const handleChangeSearch = (event) => {
-    console.log(event.target.value);
     setSearchingItem(event.target.value)
     setShowAll(false)
     }
