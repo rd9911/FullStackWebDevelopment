@@ -1,8 +1,6 @@
-const path = require('path');
-const ck = require('ckey');
-require('dotenv').config({ path: path.resolve(__dirname, './.env') });
+require('dotenv').config();
 const mongoose = require('mongoose')
-const uri = ck.MONGO_URI
+const uri = process.env.MONGO_URI
 console.log(typeof uri)
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
