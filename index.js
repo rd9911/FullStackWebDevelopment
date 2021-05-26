@@ -1,8 +1,8 @@
 const { response, request } = require('express');
+require('dotenv').config()
 const express = require('express');
 const morgan = require('morgan');
-const morganBody = require('morgan-body')
-const bodyParser = require('body-parser')
+const Contact = require('./models/contact.cjs');
 const cors = require('cors')
 const app = express();
 app.use(express.json())
@@ -18,80 +18,88 @@ const generateId = () => {
     return randNum;
 }
 
-const isExist = (arr, name) => {
-    const found = arr.find(arrItem => arrItem.name === name) ? true : false
-    return found;
-}
-
-let notes = [
-    {
-        id: 1,    
-        name: "HTML is easy",    
-        number: "676-887-87868"
-    },
-    {  
-        id: 2,    
-        name: "HTML is easy",    
-        number: "676-887-87868"
-    },  
-    { 
-        id: 3,    
-        name: "HTML y",    
-        number: "676-887-87868"
-    }
- ]
-
 app.get('/api/persons', (req, res) => {
-    res.json(notes)
+    Contact.find({}).then(contacts => {
+        res.json(contacts)
+    })
 })
 
 app.get('/info', (req, res) => {
-    let message = `Phonebook has info for ${notes.length} people`
-    const timeStamp = new Date()
-    console.log(message, timeStamp)
-    res.send(`<div><p>${message}</p><p>${timeStamp}</p></div>`)
+    Contact.find({})
+        .then(contacts => {
+            let message = `Phonebook has info for ${contacts.length} people`
+            const timeStamp = new Date()
+            console.log(message, timeStamp)
+            res.send(`<div><p>${message}</p><p>${timeStamp}</p></div>`)
+        })
+
 })
 
 app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    const note = notes.find(note => note.id === id)
+    Contact.findOne({id: Number(req.params.id)})
+        .then(selectedContact => {
+            if (!selectedContact) {
+                res.status(404).end()
+            } else {
+                res.json(selectedContact)
+            }
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(400).send({error: "malformed id"})
+        })
 
-    if (!note) {
-        res.status(404).end()
-    } else {
-        res.json(note)
-    }
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    notes = notes.filter(note => note.id !== id)
-    res.json(notes)
+    Contact.findOneAndDelete({id: Number(req.params.id)})
+        .then(updatedContacts =>{
+            res.json(updatedContacts)
+        }
+    )
 })
 
-
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', async (req, res) => {
     const body = req.body
-    if (!body.name || !body.number) {
+    console.log(body.name)
+    if (!body.name || !body.number ) {
         return res.status(400).json({
             error: "missing data"
         })
-    } else if (isExist(notes, body.name) === true) {
-        return res.status(400).json({
-            error: "existed data"
-        })
     }
-    const note = {
+    
+    const contact = Contact({
         id: generateId(),
         name: body.name,
-        number: body.number
-    }
-    notes = notes.concat(note)
+        number: body.number,
+        date: new Date()
+    })
+    console.log(contact)
+    contact.save()
+        .then(savedContact => {
+            console.log(Contact.find({}))
+            console.log(savedContact)
+            res.json(savedContact)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+        }    
+)
 
-    res.json(note)
+app.put(`/api/persons/:id`, (req, res) => {
+    console.log(req.body)
+    Contact.findOneAndUpdate({id: req.params.id},
+        {$set: {number: req.body.number}},
+        {new:true}
+    )
+    .then(updatedContacts => 
+        res.json(updatedContacts)
+    )
+    .catch(err => console.log(err))
 })
 
-const port = process.env.PORT || 3002
-app.listen(port, () => {
-    console.log(`Server is working on ${port}`)
+const PORT = process.env.PORT
+app.listen(PORT, () => {
+    console.log(`Server is working on ${PORT}`)
 })

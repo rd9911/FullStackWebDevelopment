@@ -1,3 +1,4 @@
+const { response } = require('express')
 const mongoose = require('mongoose')
 
 if (process.argv.length < 3) {
@@ -10,7 +11,9 @@ const password = process.argv[2]
 const url =
   `mongodb+srv://user8889:${password}@contacts-app.5wdr9.mongodb.net/contact-app?retryWrites=true&w=majority`
 
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true }).then(response => {
+  console.log(response)
+})
 
 const noteSchema = new mongoose.Schema({
   name: String,
@@ -33,9 +36,8 @@ if (process.argv.length > 3) {
 
 } else if (process.argv.length === 3) {
   Note.find({}).then(result => {
-    result.forEach(note => {
-        console.log(note)
-    })
+    console.log(Note)
+
     mongoose.connection.close()
 })
 }
