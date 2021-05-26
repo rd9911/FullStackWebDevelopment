@@ -1,7 +1,7 @@
 require('dotenv').config({path: '../.env'})
 const mongoose = require('mongoose')
-const uri = `${process.env.MONGO_URI}`
-
+const uri = process.env.MONGO_URI
+console.log(typeof uri)
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
 const contactSchema = new mongoose.Schema({
