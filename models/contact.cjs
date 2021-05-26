@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
-const url = process.env.MONGO_URI
+const uri = process.env.MONGO_URI
 
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
 const contactSchema = new mongoose.Schema({
   id: Number,
