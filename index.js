@@ -2,7 +2,7 @@ const { response, request } = require('express');
 require('dotenv').config()
 const express = require('express');
 const morgan = require('morgan');
-const Contact = require('./contact.cjs');
+const Contact = require('./models/contact.cjs');
 const cors = require('cors')
 const app = express();
 app.use(express.json())
