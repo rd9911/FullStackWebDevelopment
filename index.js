@@ -21,6 +21,7 @@ const generateId = () => {
 app.get('/api/persons', async (req, res) => {
     const contacts = await Contact.find({})
     if (contacts) {
+        console.log(contacts)
         res.json(contacts)
     }
 })
