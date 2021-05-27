@@ -19,7 +19,7 @@ const generateId = () => {
 }
 
 app.get('/api/persons', async (req, res) => {
-    const contacts = Contact.find({})
+    const contacts = await Contact.find({})
     if (contacts) {
         res.json(contacts)
     }
