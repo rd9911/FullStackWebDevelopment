@@ -2,7 +2,7 @@ const { response, request } = require('express');
 require('dotenv').config()
 const express = require('express');
 const morgan = require('morgan');
-const Contact = require('./contact.cjs');
+const Contact = require('./models/contact.cjs');
 const cors = require('cors')
 const app = express();
 app.use(express.json())
@@ -18,10 +18,11 @@ const generateId = () => {
     return randNum;
 }
 
-app.get('/api/persons', (req, res) => {
-    Contact.find({}).then(contacts => {
+app.get('/api/persons', async (req, res) => {
+    const contacts = Contact.find({})
+    if (contacts) {
         res.json(contacts)
-    })
+    }
 })
 
 app.get('/info', (req, res) => {
