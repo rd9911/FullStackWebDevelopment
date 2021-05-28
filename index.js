@@ -20,7 +20,7 @@ const generateId = () => {
 
 app.get('/api/persons', async (req, res) => {
     const contacts = await Contact.find({})
-    if (contacts) {
+    if (contacts.length > 0) {
         console.log(contacts)
         res.json(contacts)
     }
@@ -79,8 +79,6 @@ app.post('/api/persons', async (req, res) => {
     console.log(contact)
     contact.save()
         .then(savedContact => {
-            console.log(Contact.find({}))
-            console.log(savedContact)
             res.json(savedContact)
         })
         .catch(err => {
