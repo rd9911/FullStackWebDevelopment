@@ -2,8 +2,8 @@ const mongoose = require('mongoose')
 
 const uri = process.env.MONGO_URI
 console.log('connecting to ', uri)
-const connected = await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
-console.log('connected to MongoDB', await connected)
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+console.log('connected to MongoDB')
 
 const contactSchema = new mongoose.Schema({
   id: Number,
