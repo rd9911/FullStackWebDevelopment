@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 
-const uri = `mongodb+srv://${process.env.USER_DB}:${process.env.PASSWORD}@contacts-app.5wdr9.mongodb.net/contact-app?retryWrites=true&w=majority`
+const uri = process.env.MONGODB_URI
 console.log('connecting to ', uri)
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
-  .then(res => console.log('connected to MongoDB', res))
+  .then(res => console.log('connected to MongoDB'))
   .catch(err => console.log(err))
 const contactSchema = new mongoose.Schema({
   id: Number,
