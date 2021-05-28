@@ -20,6 +20,15 @@ const generateId = () => {
     return randNum;
 }
 
+const errorHandler = (error, req, res, next) => {
+    console.log(error)
+
+    if (error.name === "CastError") {
+        return res.status(400).send({ error: "malformated id" })
+    }
+    next(error)
+}
+
 app.get('/api/persons', async (req, res) => {
     const contacts = await Contact.find({})
     console.log(contacts)
@@ -39,7 +48,7 @@ app.get('/info', (req, res) => {
 
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
     Contact.findOne({id: Number(req.params.id)})
         .then(selectedContact => {
             if (!selectedContact) {
@@ -49,8 +58,7 @@ app.get('/api/persons/:id', (req, res) => {
             }
         })
         .catch(error => {
-            console.log(error)
-            res.status(400).send({error: "malformed id"})
+            next(error)
         })
 
 })
@@ -100,6 +108,12 @@ app.put(`/api/persons/:id`, (req, res) => {
     )
     .catch(err => console.log(err))
 })
+
+const unknownEndpoint = (req, res) => {
+    return res.status(404).send({ error: "unknown endpoint" })
+}
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
