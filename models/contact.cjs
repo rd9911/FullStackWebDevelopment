@@ -3,8 +3,8 @@ const mongoose = require('mongoose')
 const uri = process.env.MONGO_URI
 console.log('connecting to ', uri)
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
-console.log('connected to MongoDB')
-
+  .then(res => console.log('connected to MongoDB', res))
+  .catch(err => console.log(err))
 const contactSchema = new mongoose.Schema({
   id: Number,
   name: String,
