@@ -1,5 +1,6 @@
 const { response, request } = require('express');
 require('dotenv').config()
+const sslRedirect = require('heroku-ssl-redirect').default
 const express = require('express');
 const morgan = require('morgan');
 const Contact = require('./models/contact.cjs');
@@ -8,6 +9,7 @@ const app = express();
 app.use(express.json())
 app.use(express.static('build'))
 app.use(cors())
+app.use(sslRedirect())
 morgan.token('body', req => {
     return JSON.stringify(req.body)
   })
