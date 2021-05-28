@@ -20,10 +20,10 @@ const generateId = () => {
     return randNum;
 }
 
-app.get('/api/persons', (req, res) => {
-    const contacts = Contact.find({})
+app.get('/api/persons', async (req, res) => {
+    const contacts = await Contact.find({})
+    console.log(contacts)
     if (contacts.length > 0) {
-        console.log(contacts)
         res.json(contacts)
     }
 })
