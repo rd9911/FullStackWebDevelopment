@@ -81,8 +81,8 @@ app.post('/api/persons', async (req, res) => {
         .then(savedContact => {
             res.json(savedContact)
         })
-        .catch(err => {
-            console.log(err)
+        .catch(error => {
+            console.log(error)
         })
         }    
 )
