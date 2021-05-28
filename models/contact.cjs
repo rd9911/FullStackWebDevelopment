@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const uri = process.env.MONGO_URI
+const uri = "mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@contacts-app.5wdr9.mongodb.net/contact-app?retryWrites=true&w=majority"
 console.log('connecting to ', uri)
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
   .then(res => console.log('connected to MongoDB', res))
