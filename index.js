@@ -25,13 +25,14 @@ const errorHandler = (error, req, res, next) => {
 
     if (error.name === "CastError") {
         return res.status(400).send({ error: "malformated id" })
+    } else if (error.name === "ValidationError") {
+        return res.status(400).json({ error: error._message })
     }
     next(error)
 }
 
 app.get('/api/persons', async (req, res) => {
     const contacts = await Contact.find({})
-    console.log(contacts)
     if (contacts.length > 0) {
         res.json(contacts)
     }
@@ -63,24 +64,24 @@ app.get('/api/persons/:id', (req, res, next) => {
 
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
     Contact.findOneAndDelete({id: Number(req.params.id)})
         .then(updatedContacts =>{
             res.json(updatedContacts)
-        }
-    )
+        })
+        .catch(error => next(error))
 })
 
-app.post('/api/persons', async (req, res) => {
+app.post('/api/persons', async (req, res, next) => {
     const body = req.body
     console.log(body.name)
-    if (!body.name || !body.number ) {
+    if (body.name === undefined || body.number === undefined ) {
         return res.status(400).json({
             error: "missing data"
         })
     }
     
-    const contact = Contact({
+    const contact = new Contact({
         id: generateId(),
         name: body.name,
         number: body.number,
@@ -91,22 +92,20 @@ app.post('/api/persons', async (req, res) => {
         .then(savedContact => {
             res.json(savedContact)
         })
-        .catch(error => {
-            console.log(error)
-        })
-        }    
-)
+        .catch(err => next(err))
+})
 
 app.put(`/api/persons/:id`, (req, res) => {
+    const opts = { runValidators: true }
     console.log(req.body)
     Contact.findOneAndUpdate({id: req.params.id},
         {$set: {number: req.body.number}},
-        {new:true}
+        {new:true},
     )
-    .then(updatedContacts => 
+    .then(updatedContacts => {
+        console.log(updatedContacts)
         res.json(updatedContacts)
-    )
-    .catch(err => console.log(err))
+    })
 })
 
 const unknownEndpoint = (req, res) => {
