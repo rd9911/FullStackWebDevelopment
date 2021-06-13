@@ -1,6 +1,6 @@
-const helperFuncs = require('./utils/helper_list');
+const Blog = require('../models/blog');
 
-const blogs = [
+const initialBlogs = [
     {
         _id: '5a422a851b54a676234d17f7',
         title: 'React patterns',
@@ -51,33 +51,11 @@ const blogs = [
     }  
 ];
 
-describe('dummy', () => {
-    test('returns 1', () => {
-        expect(helperFuncs.dummy([])).toBe(1);
-    });
-});
+const blogsInDB = async () => {
+    const blogs = await Blog.find({});
+    return blogs.map(blog => blog.toJSON());
+};
 
-describe('accumulate likes', () => {
-    test('should return 36', () => {
-        expect(helperFuncs.totalLikes(blogs)).toBe(36);
-    });
-    
-});
-
-describe('most liked blog post', () => {
-    test('find the most liked one', () => {
-        expect(helperFuncs.mostLiked(blogs)).toEqual(blogs[2]);
-    });
-});
-
-describe('the most liked author', () => {
-    test('Dijkstra mus come', () => {
-        expect(helperFuncs.getLikes(blogs)).toEqual({author: 'Edsger W. Dijkstra', likes: 17});
-    });
-});
-
-describe('the most blogs', () => {
-    test('C. Martin should come up', () => {
-        expect(helperFuncs.mostBlogs(blogs)).toEqual({author: 'Robert C. Martin', posts: 3});
-    });
-});
+module.exports = {
+    initialBlogs, blogsInDB
+};

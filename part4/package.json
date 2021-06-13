@@ -3,29 +3,39 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "commonjs",
+  "engines": {
+    "node": "15.12.0",
+    "npm": "7.10"
+  },
   "scripts": {
-    "test": "jest --verbose",
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose",
+    "start": "cross_env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
     "lint": "npx eslint"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "eslint-config-airbnb": "^18.2.1",
     "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
     "http": "*",
     "mongoose": "^5.12.13",
+    "morgan": "^1.10.0",
+    "nanoid": "^3.1.23",
     "nodemon": "^2.0.7"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
+    "cross-env": "^7.0.3",
     "eslint": "^7.28.0",
-    "jest": "^27.0.4"
+    "jest": "^27.0.4",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.3"
   },
   "jest": {
     "testEnvironment": "node"
