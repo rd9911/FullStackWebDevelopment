@@ -35,12 +35,12 @@ describe('get a specific blog by id', () => {
 describe('post', () => {
     test('post a blog', async () => {
         const blogs = await testHelper.blogsInDB();
-        const blog = new Blog({
+        const blog = {
             title: 'Suomi',
             author: 'Ler',
             url: 'ola.com',
             likes: 9
-        });
+        };
         await api.post('/api/blogs')
             .send(blog)
             .expect(201)
@@ -48,18 +48,37 @@ describe('post', () => {
         expect(await testHelper.blogsInDB()).toHaveLength(blogs.length + 1);
     });
 
-    // test('likes default to 0 if it is missing', async () => {
-    //     const blogs = await testHelper.blogsInDB();
-    //     const blog = new Blog({
-    //         title: 'Suomi',
-    //         author: 'Ler',
-    //         url: 'ola.com',
-    //     });
-    //     await blog.save();
-    //     const updatedBlogs = await testHelper.blogsInDB();
-    //     console.log(updatedBlogs[blogs.length]);
-    //     expect(updatedBlogs[blogs.length].likes).toBe(0);
-    // });
+    test('likes default to 0 if it is missing', async () => {
+        const blogs = await testHelper.blogsInDB();
+        const blog = new Blog({
+            title: 'Suomi',
+            author: 'Ler',
+            url: 'ola.com',
+        });
+        await blog.save();
+        const updatedBlogs = await testHelper.blogsInDB();
+        console.log(updatedBlogs[blogs.length]);
+        expect(updatedBlogs[blogs.length].likes).toBe(0);
+    });
+});
+
+describe('delete', () => {
+    test('delete blog by its id', async () => {
+        const blogs = await testHelper.blogsInDB();
+        await api.delete(`/api/blogs/${blogs[0].id}`);
+        const updatedBlogs = await testHelper.blogsInDB();
+        expect(updatedBlogs).toHaveLength(blogs.length - 1);
+    });
+});
+
+describe('update', () => {
+    test('iincrement likes', async () => {
+        const blogs = await testHelper.blogsInDB();
+        const blogToLike = blogs[0];
+        await api.put('/api/blogs').send(blogToLike);
+        const updatedBlogs = await testHelper.blogsInDB();
+        expect(updatedBlogs[0].likes).toBe(blogToLike.likes + 1);
+    });
 });
 
 afterAll((done) => {

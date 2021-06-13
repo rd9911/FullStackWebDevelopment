@@ -9,7 +9,6 @@ blogRouter.get('/', async (req, res) => {
   
 blogRouter.post('/', async (req, res) => {
     const body = req.body;
-    console.log(body);
     if (body.title === undefined && body.url === undefined) {
         res.status(400).send({error: 'Missing data'});
         return;
@@ -27,8 +26,17 @@ blogRouter.post('/', async (req, res) => {
 
 blogRouter.get('/:id', async (req, res) => {
     const blog = await Blog.findById(req.params.id );
-
     res.json(blog);
+});
+
+blogRouter.delete('/:id', async (req, res) => {
+    const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
+    res.json(deletedBlog);
+});
+
+blogRouter.put('/', async (req, res) => {
+    const updatedBlog = await Blog.findOneAndUpdate({title: req.body.title}, { $inc: {likes: 1}});
+    res.json(updatedBlog);
 });
 
 module.exports = blogRouter;
