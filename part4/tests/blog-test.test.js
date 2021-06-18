@@ -68,7 +68,7 @@ describe('delete', () => {
         await api.delete(`/api/blogs/${blogs[0].id}`);
         const updatedBlogs = await testHelper.blogsInDB();
         expect(updatedBlogs).toHaveLength(blogs.length - 1);
-    });
+    }); 
 });
 
 describe('update', () => {
