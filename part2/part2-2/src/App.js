@@ -9,7 +9,7 @@ import styleFormats from './styles/styles';
 import { nanoid } from 'nanoid';
 
 const App = () => {
-  const [ persons, setPersons ] = useState([]) 
+  const [ persons, setPersons ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchingItem, setSearchingItem ] = useState('')
@@ -20,13 +20,13 @@ const App = () => {
     contactServices
       .getAll()
       .then(allContacts => setPersons(allContacts))
+      .catch(err => { console.log(err) })
   }, [])
 
   const addPerson = (event) => {
     event.preventDefault();
     if (isExist(persons, newName) === false) {
       const newOne = {
-        id: nanoid(),
         name: newName,
         number: newNumber
       }
@@ -34,16 +34,18 @@ const App = () => {
         .create(newOne)
         .then(newContact => {
           console.log(newContact)
-          setPersons(persons.concat(newOne))
+          setPersons(persons.concat(newContact))
           setNewName('')
           setNewNumber('')
           setErrorMessage(`${newContact.name} is added.`)
+        })
+        .catch(error => {
+          setErrorMessage(error.response.data.error)
         })
       } else {
         if (window.confirm(`${newName} is already exist. Thus, we can replace ${newName}'s number. Do you want to replace his number?`)) {
           const contact = persons.find(person => person.name === newName)
           const changedPerson = {...contact, number: newNumber}
-
           contactServices
             .update(contact.id, changedPerson)
             .then(updatedContact => {
@@ -64,7 +66,6 @@ const App = () => {
   }
 
   const deletePerson = (id) => {
-    console.log(id)
     contactServices
       .deleteContact(id)
       .then(remainedContacts => {
@@ -95,13 +96,11 @@ const App = () => {
           <div style={styleFormats.messageToUser}>
             <h1 style={{fontColor: 'red'}}>{errorMessage}</h1>
           </div>}
-      
-      
       <div>
         Search a name <Filter value={searchingItem} onChange={handleChangeSearch} />
       </div>
       <h2>Add a new contact</h2>
-      <form onSubmit={addPerson}>
+      <form onSubmit={addPerson} action="/api/persons" method="post">
         <div>
           name <Name value={newName} onChange={handleChangeName} />
         </div>
@@ -115,7 +114,7 @@ const App = () => {
       <h2>{showAll ? 'Numbers' : 'Result'}</h2>
       <div>debug: {newName}</div>
       <ul>
-        {contactsToShow.map(contact => <Contact key={nanoid()} contact={contact} deleteClick={() => deletePerson(contact.id)} />)}
+        {contactsToShow && contactsToShow.map(contact => <Contact key={nanoid()} contact={contact} deleteClick={() => deletePerson(contact.id)} />)}
       </ul>
     </div>
   )

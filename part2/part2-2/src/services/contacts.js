@@ -3,21 +3,24 @@ const baseUrl = '/api/persons';
 
 const getAll = () => {
     const request = axios.get(baseUrl)
-    return request
-    .then(response => response.data)
-    .catch(err => {
-        console.log(err)
-    });
+    return request.then(response => response.data)
 }
 
 const create = (newObject) => {
-    const request = axios.post(`${baseUrl}`, newObject)
+    const readyToPost = {
+        method: 'post',
+        url: `${baseUrl}`,
+        data: newObject,
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin' : '*',
+            'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS', 
+        },
+        json: true
+      }
+    const request = axios(readyToPost)
     return request.then(response => {
-        console.log(response.data)
         return response.data
-    })
-    .catch(err => {
-        console.log(err)
     })
 }
 
