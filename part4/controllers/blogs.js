@@ -14,14 +14,13 @@ blogRouter.get('/', async (req, res) => {
   
 blogRouter.post('/', async (req, res) => {
     const body = req.body;
-    const token = req.token;
-    const decodedToken = jwt.verify(token, process.env.SECRET);
-    if ((!token || !decodedToken)) {
+    const user = req.user;
+    console.log(user);
+    if (!user) {
         return res.status(401).json({ error: 'unauthorized: token missing or invalid' });
     } else if (!body.title || !body.url) {
         return res.status(400).json({error: 'Missing data'});
     }
-    const user = await User.findById(decodedToken.id);
     const blog = new Blog({
         title: body.title,
         author: body.author,
@@ -42,15 +41,14 @@ blogRouter.get('/:id', async (req, res) => {
 });
 
 blogRouter.delete('/:id', async (req, res) => {
-    const token = req.token;
-    const decodedToken = jwt.verify(token, process.env.SECRET);
     const blog = await Blog.findById(req.params.id);
-    if (blog.user.toString() !== decodedToken.id ) {
-        res.status(401).json({ error: 'missing or invalid token.' });
+    console.log(blog);
+    console.log(req.user);
+    if (blog.user.toString() !== req.user._id.toString() ) {
+        return res.status(401).json({ error: 'missing or invalid token.' });
     }
     const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
     return res.json(deletedBlog);
-    
 });
 
 blogRouter.put('/', async (req, res) => {

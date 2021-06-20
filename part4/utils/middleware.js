@@ -35,14 +35,14 @@ const tokenExtractor = (req, res, next) => {
     next();  
 };
 
-// const userExtractor = (req, res, next) => {
-//     const decodedToken = jwt.verify(req.token, process.env.SECRET);
-//     if (decodedToken && req.token) {
-//         const user = User.findById(decodedToken.id);
-//         req.user = user;
-//     }
-//     next();
-// };
+const userExtractor = async (req, res, next) => {
+    const decodedToken = jwt.verify(req.token, process.env.SECRET);
+    if (decodedToken && req.token) {
+        const user = await User.findById(decodedToken.id);
+        req.user = user;
+    }
+    next();
+};
 
 
 module.exports = {
@@ -50,5 +50,5 @@ module.exports = {
     unknownEndpoint,
     errorHandler,
     tokenExtractor,
-    // userExtractor
+    userExtractor
 };
