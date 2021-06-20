@@ -29,7 +29,6 @@ const tokenExtractor = (req, res, next) => {
     console.log(authorization);
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
         req.token = authorization.substring(7);
-        next();
     }
     next();
     
