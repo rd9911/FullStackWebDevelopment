@@ -12,12 +12,16 @@ const configs = require('./utils/config');
 const mongoUrl = configs.mongodbUri;
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true });
 
-app.use(middlewares.requestLogger);
+
 app.use(cors());
 app.use(express.json());
+app.use(middlewares.tokenExtractor);
+app.use(middlewares.requestLogger);
+
 app.use('/api/blogs', blogRouter);
 app.use('/api/users', userRouter);
 app.use('/api/login', loginRouter);
+
 app.use(middlewares.unknownEndpoint);
 app.use(middlewares.errorHandler);
 

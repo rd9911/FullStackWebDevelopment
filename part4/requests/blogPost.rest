@@ -1,9 +1,9 @@
 post http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkZyYW56IEthZmthIiwiaWQiOiI2MGNlYjdhMWRiYzA3NzM0ZjA2OTU4Y2MiLCJpYXQiOjE2MjQxNjU5Njd9.t-TJa3xMPYArr8olbh2eLm4G0fRy4cOa_Wi6kxYXguA
 
 {
     "url": "https://kafka.com",
-    "title": "Hope",
-    "author": "Kafka",
-    "userId": "60cdad598b2d4a7a470ccaa7"
+    "title": "No street",
+    "author": "Franz Kafka"
 }

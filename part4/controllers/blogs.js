@@ -2,6 +2,7 @@ const blogRouter = require('express').Router();
 const Blog = require('../models/blog');
 const { nanoid } = require('nanoid');
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 
 blogRouter.get('/', async (req, res) => {
     const blogs = await Blog.find({}).populate('user', {
@@ -13,11 +14,14 @@ blogRouter.get('/', async (req, res) => {
   
 blogRouter.post('/', async (req, res) => {
     const body = req.body;
-    if (body.title === undefined && body.url === undefined) {
-        res.status(400).send({error: 'Missing data'});
-        return;
+    const token = req.token;
+    const decodedToken = jwt.verify(token, process.env.SECRET);
+    if ((!token || !decodedToken)) {
+        return res.status(401).json({ error: 'unauthorized: token missing or invalid' });
+    } else if (!body.title || !body.url) {
+        return res.status(400).json({error: 'Missing data'});
     }
-    const user = await User.findById(body.userId);
+    const user = await User.findById(decodedToken.id);
     const blog = new Blog({
         title: body.title,
         author: body.author,
@@ -29,7 +33,7 @@ blogRouter.post('/', async (req, res) => {
     const result = await blog.save();
     user.blogs = user.blogs.concat(blog);
     await user.save();
-    res.status(201).json(result);
+    return res.status(201).json(result);
 });
 
 blogRouter.get('/:id', async (req, res) => {
