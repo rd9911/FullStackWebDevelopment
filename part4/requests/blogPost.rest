@@ -1,0 +1,9 @@
+post http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "url": "https://kafka.com",
+    "title": "Hope",
+    "author": "Kafka",
+    "userId": "60cdad598b2d4a7a470ccaa7"
+}

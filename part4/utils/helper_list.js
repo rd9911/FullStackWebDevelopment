@@ -48,4 +48,11 @@ const mostBlogs = (objList) => {
     return {author: mostLikedAuthor.author, posts: mostLikedAuthor.posts};
 };
 
+// const checkLength = (str, atLeast) => {
+//     if (str && /^\d{atLeast,}$/.test(str.trim())) {
+//         return true;
+//     }
+//     return false;
+// };
+
 module.exports = { dummy, totalLikes, mostLiked, getLikes, mostBlogs };
