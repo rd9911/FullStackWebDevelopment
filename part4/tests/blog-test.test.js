@@ -2,16 +2,15 @@ const app = require('../app');
 const supertest = require('supertest');
 const mongoose = require('mongoose');
 const Blog = require('../models/blog');
-const testHelper = require('./test_helper.cjs');
+const testHelper = require('./testHelper.cjs');
 const User = require('../models/user');
-const bcrypt = require('bcrypt');
 
 const api = supertest(app);
 beforeEach(async () => {
     await Blog.deleteMany({});
     await User.deleteMany({});
     await Blog.insertMany(testHelper.initialBlogs);
-    await User.insertMany(testHelper.initialUsers);
+    await api.post('/api/users').send(testHelper.initialUsers[0]);
 });
 
 describe('Blog', () => {
@@ -19,7 +18,6 @@ describe('Blog', () => {
         const response = await api.get('/api/blogs');
         expect(response.body).toHaveLength(6);
     });
-
 
     test('get a blog', async () => {
         const requestedBlog = await testHelper.blogsInDB();
@@ -34,44 +32,93 @@ describe('Blog', () => {
     });
 
     test('post a blog', async () => {
-        const blogs = await testHelper.blogsInDB();
-        const blog = {
+        const userToLogin = {
+            username: 'pola123',
+            password: 'abc123'
+        };
+        const responseFromLogin = await api.post('/api/login')
+            .send(userToLogin)
+            .expect(200)
+            .expect('Content-Type', /application\/json/);        
+        const tokenToAuthorize = `bearer ${responseFromLogin.body.token}`;
+        const blogsBeforePost = await testHelper.blogsInDB();
+        const blogToPost = {
             title: 'Suomi',
             author: 'Ler',
             url: 'ola.com',
             likes: 9
         };
         await api.post('/api/blogs')
-            .send(blog)
+            .send(blogToPost)
+            .set('Authorization', tokenToAuthorize)
             .expect(201)
             .expect('Content-Type', /application\/json/);
-        expect(await testHelper.blogsInDB()).toHaveLength(blogs.length + 1);
+        const blogsAfterPost = await testHelper.blogsInDB();
+        expect(blogsAfterPost).toHaveLength(blogsBeforePost.length + 1);
     });
 
-    test('likes default to 0 if it is missing', async () => {
-        const blogs = await testHelper.blogsInDB();
-        const blog = new Blog({
+    test('if there is no token 401 error is thrown', async () => {
+        const blogToPost = {
             title: 'Suomi',
             author: 'Ler',
             url: 'ola.com',
-        });
-        await blog.save();
-        const updatedBlogs = await testHelper.blogsInDB();
-        console.log(updatedBlogs[blogs.length]);
-        expect(updatedBlogs[blogs.length].likes).toBe(0);
+            likes: 9
+        };
+        const response = await api.post('/api/blogs')
+            .send(blogToPost)
+            .expect(401)
+            .expect('Content-Type', /application\/json/);
+        
+        expect(response.body.error).toContain('unauthorized: token missing or invalid');
+    });
+
+    test('likes default to 0 if it is missing', async () => {
+        const userToLogin = {
+            username: 'pola123',
+            password: 'abc123'
+        };
+        const responseFromLogin = await api.post('/api/login')
+            .send(userToLogin)
+            .expect(200)
+            .expect('Content-Type', /application\/json/);        
+        const tokenToAuthorize = `bearer ${responseFromLogin.body.token}`;
+
+        const blogToPost = {
+            title: 'Suomi',
+            author: 'Ler',
+            url: 'ola.com',
+        };
+        await api.post('/api/blogs')
+            .send(blogToPost)
+            .set('Authorization', tokenToAuthorize)
+            .expect(201)
+            .expect('Content-Type', /application\/json/);
+        const blogsAfterPost = await testHelper.blogsInDB();
+        const indexOfPostedBlog = blogsAfterPost.length - 1;
+        expect(blogsAfterPost[indexOfPostedBlog].likes).toBe(0);
     });
 
     test('delete blog by its id', async () => {
+        const responseFromLogin = await api.post('/api/login')
+            .send({ username: 'pola123', password: 'abc123'}).expect(200).expect('Content-Type', /application\/json/);        
+        const tokenToAuthorize = `bearer ${responseFromLogin.body.token}`;
+        await api.post('/api/blogs')
+            .send({title: 'Suomi', author: 'Ler', url: 'ola.com'}).set('Authorization', tokenToAuthorize).expect(201).expect('Content-Type', /application\/json/);
+
         const blogs = await testHelper.blogsInDB();
-        await api.delete(`/api/blogs/${blogs[0].id}`);
+        const blogToDeleteId = blogs[blogs.length -1].id;
+        await api.delete(`/api/blogs/${blogToDeleteId}`)
+            .set('Authorization', tokenToAuthorize)
+            .expect(200)
+            .expect('Content-Type', /application\/json/);
         const updatedBlogs = await testHelper.blogsInDB();
         expect(updatedBlogs).toHaveLength(blogs.length - 1);
-    }); 
+    });
 
     test('increment likes', async () => {
         const blogs = await testHelper.blogsInDB();
         const blogToLike = blogs[0];
-        await api.put('/api/blogs').send(blogToLike);
+        await api.put(`/api/blogs/${blogToLike.id}`);
         const updatedBlogs = await testHelper.blogsInDB();
         expect(updatedBlogs[0].likes).toBe(blogToLike.likes + 1);
     });
@@ -131,18 +178,20 @@ describe('User', () => {
     });
 
     test('in blog object user key is defined', async () => {
-        const blog = {
+        const responseFromLogin = await api.post('/api/login')
+            .send({ username: 'pola123', password: 'abc123'}).expect(200).expect('Content-Type', /application\/json/);
+        const tokenToAuthorize = `bearer ${responseFromLogin.body.token}`;
+        const blogToPost = {
             url: 'https://dot.com',
             title: 'Beauty of the nature.',
             author: 'Clementine',
-            userId: '60cd4791d35ea6387353c96a'
         };
-        console.log(blog);
-        const response = await api.post('/api/blogs')
-            .send(blog)
+        const responseFromPost = await api.post('/api/blogs')
+            .send(blogToPost)
+            .set('Authorization', tokenToAuthorize)
             .expect(201)
             .expect('Content-Type', /application\/json/);
-        expect(response.body.user).toBeDefined();
+        expect(responseFromPost.body.user).toBeDefined();
     });
 
     test('fail to create repeated usernames', async () => {
@@ -154,9 +203,10 @@ describe('User', () => {
         };
 
         const response = await api.post('/api/users')
-            .send(user);
-        console.log(response.body.error);
-        expect(response.body.error).toContain('Error, expected \'username\' to be unique. Value: \'poiuyt\'');
+            .send(user)
+            .expect(400)
+            .expect('Content-Type', /application\/json/);
+        expect(response.body.error).toContain('User validation failed');
     });
 });
 

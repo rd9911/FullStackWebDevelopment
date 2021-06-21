@@ -1,3 +1,10 @@
-delete http://localhost:3003/api/blogs/60cf0ba556f7b032d1e797ec
+post http://localhost:3003/api/blogs/
 Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkZyYW56IEthZmthIiwiaWQiOiI2MGNlYjdhMWRiYzA3NzM0ZjA2OTU4Y2MiLCJpYXQiOjE2MjQxODIzNjN9.3hCWQnYR_7qbkqhRyOvX6ZIyNpyqmdQVtUdyrI72hoI
+
+{
+    "title": "ratatuy",
+    "author": "2pac",
+    "url": "2p.com",
+    "likes": 7
+}

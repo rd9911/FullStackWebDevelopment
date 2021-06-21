@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
         }
     ]
 });
-userSchema.plugin(uniqueValidator);
+userSchema.plugin(uniqueValidator, { message: 'Error: username should be unique!' });
 
 userSchema.set('toJSON', {
     transform: (document, returnedObj) => {

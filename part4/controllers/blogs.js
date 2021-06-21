@@ -1,8 +1,5 @@
 const blogRouter = require('express').Router();
 const Blog = require('../models/blog');
-const { nanoid } = require('nanoid');
-const User = require('../models/user');
-const jwt = require('jsonwebtoken');
 
 blogRouter.get('/', async (req, res) => {
     const blogs = await Blog.find({}).populate('user', {
@@ -15,7 +12,6 @@ blogRouter.get('/', async (req, res) => {
 blogRouter.post('/', async (req, res) => {
     const body = req.body;
     const user = req.user;
-    console.log(user);
     if (!user) {
         return res.status(401).json({ error: 'unauthorized: token missing or invalid' });
     } else if (!body.title || !body.url) {
@@ -40,10 +36,8 @@ blogRouter.get('/:id', async (req, res) => {
     res.json(blog);
 });
 
-blogRouter.delete('/:id', async (req, res) => {
+blogRouter.delete('/:id', async (req, res) => { // need new middleware to verify the user
     const blog = await Blog.findById(req.params.id);
-    console.log(blog);
-    console.log(req.user);
     if (blog.user.toString() !== req.user._id.toString() ) {
         return res.status(401).json({ error: 'missing or invalid token.' });
     }
@@ -51,8 +45,8 @@ blogRouter.delete('/:id', async (req, res) => {
     return res.json(deletedBlog);
 });
 
-blogRouter.put('/', async (req, res) => {
-    const updatedBlog = await Blog.findOneAndUpdate({title: req.body.title}, { $inc: {likes: 1}});
+blogRouter.put('/:id', async (req, res) => {    
+    const updatedBlog = await Blog.findByIdAndUpdate({_id: req.params.id}, { $inc: {likes: 1}});
     res.json(updatedBlog);
 });
 
