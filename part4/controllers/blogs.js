@@ -46,7 +46,7 @@ blogRouter.delete('/:id', async (req, res) => { // need new middleware to verify
 });
 
 blogRouter.put('/:id', async (req, res) => {    
-    const updatedBlog = await Blog.findByIdAndUpdate({_id: req.params.id}, { $inc: {likes: 1}});
+    const updatedBlog = await Blog.findOneAndUpdate({_id: req.params.id}, { $inc: {likes: 1}});
     res.json(updatedBlog);
 });
 

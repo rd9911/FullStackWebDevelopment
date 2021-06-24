@@ -11,7 +11,8 @@
     "test": "cross-env NODE_ENV=test jest --verbose",
     "start": "cross_env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
-    "lint": "npx eslint"
+    "lint": "npx eslint",
+    "build-ui": "cd ../part5/bloglist-frontend && npm run build && cd .. && cp -r bloglist-frontend/build ../part4"
   },
   "author": "",
   "license": "ISC",
