@@ -37,11 +37,11 @@ blogRouter.get('/:id', async (req, res) => {
 });
 
 blogRouter.delete('/:id', async (req, res) => { // need new middleware to verify the user
-    const blog = await Blog.findById(req.params.id);
+    const blog = await Blog.findOne({_id: req.params.id});
     if (blog.user.toString() !== req.user._id.toString() ) {
         return res.status(401).json({ error: 'missing or invalid token.' });
     }
-    const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
+    const deletedBlog = await Blog.findOneAndRemove({_id: req.params.id});
     return res.json(deletedBlog);
 });
 
