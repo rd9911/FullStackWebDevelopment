@@ -1,7 +1,7 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
-let token = null;
+let token = null
 
 const setToken = (tokenFromUser) => {
   token = `bearer ${tokenFromUser}`
@@ -22,5 +22,29 @@ const create = async (blog) => {
   return response.data
 }
 
+const likeBlog = async (blogId) => {
+  if (token) {
+    const config = {
+      headers: {
+        Authorization: token
+      }
+    }
+    const response = await axios.put(`${baseUrl}/${blogId}`, config)
+    return response.data
+  }
+}
+
+const deleteBlog = async (blogId) => {
+  if (token) {
+    const config = {
+      headers: {
+        Authorization: token
+      }
+    }
+    const response = await axios.delete(`${baseUrl}/${blogId}`, config)
+    return response.data
+  }
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, create, setToken }
+export default { getAll, create, setToken, likeBlog, deleteBlog }

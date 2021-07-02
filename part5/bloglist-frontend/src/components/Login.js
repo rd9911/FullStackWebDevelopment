@@ -1,11 +1,33 @@
-const Login = (props) => {
-    return (
-    <form onSubmit={props.handleSubmit}>
-        username <input type='text' name='username' id='getUsername' value={props.username} onChange={({target}) => props.handleChangeUsername(target.value)} />
-        <br /> password <input type='text' name='password' id='getPassword' value={props.password} onChange={({target}) => props.handleChangePassword(target.value)} />
-        <input type='submit' name='submit' id='submitForm' value='Submit' />
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+
+
+const Login = ({ onLogin }) => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const loginSubmit = async (event) => {
+    event.preventDefault()
+    const userToLogin = {
+      username: username,
+      password: password
+    }
+    await onLogin(userToLogin)
+    setUsername('')  // GETTING WARNING. FIX IT!!!
+    setPassword('')
+  }
+
+  return (
+    <form onSubmit={loginSubmit}>
+        username <input type='text' name='username' id='getUsername' value={username} onChange={({ target }) => setUsername(target.value)} />
+      <br /> password <input type='text' name='password' id='getPassword' value={password} onChange={({ target }) => setPassword(target.value)} />
+      <input type='submit' name='submit' id='submitForm' value='Submit' />
     </form>
-    )
+  )
+}
+
+Login.propTypes = {
+  onLogin: PropTypes.func.isRequired
 }
 
 export default Login

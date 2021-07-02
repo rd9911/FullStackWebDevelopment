@@ -1,19 +1,42 @@
-const CreateForm = (props) => {
-    return (
-        <div>
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+
+const CreateForm = ({ onBlogPost }) => {
+  const [title, setTitle] = useState('')
+  const [url, setUrl] = useState('')
+  const [author, setAuthor] = useState('')
+
+  const postBlog = async (event) => {
+    event.preventDefault()
+    const blogToPost = {
+      title: title,
+      author: author,
+      url: url
+    }
+    const postedBlog = await onBlogPost(blogToPost)
+    if (postedBlog) {
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    }
+  }
+
+  return (
+    <div>
             Create new
-            <form onSubmit={props.handleSubmit}>
-                title <input value={props.title} onChange={({target}) => { props.handleChangeTitle(target.value)} } /><br />
-                author <input value={props.author} onChange={({target}) => { props.handleChangeAuthor(target.value)} } /><br />
-                url <input value={props.url} onChange={({target}) => { props.handleChangeUrl(target.value)} } /><br />
-                <input type='submit' value='create' />
-            </form>
-            <div>
-                <input type='button' value='cancel' onClick={props.handleCancelClick} />
-            </div>
-        </div>
-        
-    )
+      <form onSubmit={postBlog}>
+                title <input value={title} onChange={({ target }) => { setTitle(target.value)} } /><br />
+                author <input value={author} onChange={({ target }) => { setAuthor(target.value)} } /><br />
+                url <input value={url} onChange={({ target }) => { setUrl(target.value)} } /><br />
+        <input type='submit' value='create' />
+      </form>
+    </div>
+
+  )
+}
+
+CreateForm.propTypes = {
+  onBlogPost: PropTypes.func.isRequired
 }
 
 export default CreateForm
