@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Login from './components/Login'
 import Toggable from './components/Toggable'
-import CreateForm from './components/CreateForm'
+import CreateForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 

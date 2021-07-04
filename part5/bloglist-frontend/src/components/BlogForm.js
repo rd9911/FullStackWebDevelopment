@@ -25,9 +25,9 @@ const CreateForm = ({ onBlogPost }) => {
     <div>
             Create new
       <form onSubmit={postBlog}>
-                title <input value={title} onChange={({ target }) => { setTitle(target.value)} } /><br />
-                author <input value={author} onChange={({ target }) => { setAuthor(target.value)} } /><br />
-                url <input value={url} onChange={({ target }) => { setUrl(target.value)} } /><br />
+        title <input className = 'title' value={title} onChange={({ target }) => { setTitle(target.value)} } /><br />
+        author <input className ='author' value={author} onChange={({ target }) => { setAuthor(target.value)} } /><br />
+        url <input className='url' value={url} onChange={({ target }) => { setUrl(target.value)} } /><br />
         <input type='submit' value='create' />
       </form>
     </div>
