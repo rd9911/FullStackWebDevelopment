@@ -8,11 +8,12 @@
     "npm": "7.10"
   },
   "scripts": {
-    "test": "cross-env NODE_ENV=test jest --verbose",
-    "start": "cross_env NODE_ENV=production node index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
+    "start:test": "cross-env NODE_ENV=test node index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "lint": "npx eslint",
-    "build-ui": "cd ../part5/bloglist-frontend && npm run build && cd .. && cp -r bloglist-frontend/build ../part4"
+    "build-ui": "rm -rf build && cd ../part5/bloglist-frontend && npm run build && cd .. && cp -r bloglist-frontend/build ../part4"
   },
   "author": "",
   "license": "ISC",

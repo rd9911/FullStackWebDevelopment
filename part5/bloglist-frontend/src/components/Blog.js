@@ -15,14 +15,14 @@ const Blog = ({ blog, onLikeBlog, onRemoveBlog }) => {
         ?
         <div className='detail-view'>
           {blog.title} by {blog.author} on {blog.url} likes {blog.likes}
-          <button value='like' onClick={() => onLikeBlog(blog.id)} >like</button>
-          <button value='delete' onClick={() => onRemoveBlog(blog.id, blog)} >delete</button>
-          <button value='hide' onClick={handleChangeFullDetails} >hide</button>
+          <button value='like' className='like' onClick={() => onLikeBlog(blog.id)} >like</button>
+          <button value='delete' className='delete' onClick={() => onRemoveBlog(blog.id, blog)} >delete</button>
+          <button value='hide' className='hide' onClick={handleChangeFullDetails} >hide</button>
         </div>
         :
         <div className='short-view'>
           {blog.title} by {blog.author}
-          <button value='view' onClick={handleChangeFullDetails} >view</button>
+          <button value='view' className='view' onClick={handleChangeFullDetails} >view</button>
         </div>
       }
     </div>

@@ -77,7 +77,7 @@ const App = () => {
         return blog
       })
       setBlogs(updatedBlogs)
-      setErrorMessage(`a new blog ${likedBlog.title} is liked by ${user.username}`)
+      setErrorMessage(`the blog ${likedBlog.title} is liked by ${user.username}`)
       setTimeout(() => { setErrorMessage('') }, 3000)
     } catch(error) {
       setErrorMessage(error)
@@ -89,12 +89,12 @@ const App = () => {
     const confirm = window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}?`)
     if (confirm) {
       try {
-        console.log(blogToRemove)
         const deletedBlog = await blogService.deleteBlog(blogId)
-        console.log(deletedBlog)
         setBlogs(blogs.filter(blog => blog.id !== deletedBlog.id))
+        setErrorMessage(`${deletedBlog.title} was deleted by ${user.username}`)
+        setTimeout(() => setErrorMessage(''), 3000)
       } catch(error) {
-        setErrorMessage(error)
+        setErrorMessage('missing or invalid token.')
         setTimeout(() => setErrorMessage(''), 3000)
       }
     }
@@ -108,8 +108,9 @@ const App = () => {
         {user
 
           ? <div>
-            <p>{user.username} logged in</p> <input type='button' value='logout' onClick={logout} />
-            <Toggable btnLabel='create blog' ref={blogRef} >
+            <p>{user.username} logged in</p>
+            <input type='button' className='logout' value='logout' onClick={logout} />
+            <Toggable btnLabel='create-blog' ref={blogRef} >
               <CreateForm onBlogPost={postBlog} />
             </Toggable>
 
@@ -123,7 +124,7 @@ const App = () => {
 
           : <div>
             <h2>Login</h2>
-            <Toggable btnLabel='login' ref={loginRef} >
+            <Toggable btnLabel='log-in' ref={loginRef} >
               <Login onLogin={login} />
             </Toggable>
           </div>

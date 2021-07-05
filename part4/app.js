@@ -21,6 +21,11 @@ app.use('/api/blogs',  middlewares.userExtractor, blogRouter);
 app.use('/api/users', userRouter);
 app.use('/api/login', loginRouter);
 
+if (process.env.NODE_ENV === 'test') {
+    const testRouter = require('./controllers/test');
+    app.use('/api/test', testRouter);
+}
+
 app.use(middlewares.unknownEndpoint);
 app.use(middlewares.errorHandler);
 

@@ -17,7 +17,7 @@ const Toggable = React.forwardRef((props, ref) => {
   return (
     <div>
       <div style={{ display: formVisible ? 'None' : '' }}>
-        <input type='button' value={props.btnLabel} onClick={handleCreateBlogClick} />
+        <input className={props.btnLabel} type='button' value={props.btnLabel} onClick={handleCreateBlogClick} />
       </div>
       <div style={{ display: formVisible ? '' : 'None' }} className='show-child'>
         {props.children}

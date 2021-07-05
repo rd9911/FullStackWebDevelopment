@@ -5,12 +5,6 @@ import { prettyDOM } from '@testing-library/dom' // To get smaller element { com
 import BlogForm from '../components/BlogForm'
 
 test('posting a blog via <Blog />', () => {
-  const blog = {
-    title: 'Hello',
-    author: 'Ulou Lop',
-    url: 'kol.com',
-    likes: 5
-  }
   const mockHandler = jest.fn()
 
   const component = render(

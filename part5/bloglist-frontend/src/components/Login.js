@@ -19,8 +19,8 @@ const Login = ({ onLogin }) => {
 
   return (
     <form onSubmit={loginSubmit}>
-        username <input type='text' name='username' id='getUsername' value={username} onChange={({ target }) => setUsername(target.value)} />
-      <br /> password <input type='text' name='password' id='getPassword' value={password} onChange={({ target }) => setPassword(target.value)} />
+        username <input type='text' className='username' name='username' id='getUsername' value={username} onChange={({ target }) => setUsername(target.value)} /><br />
+        password <input type='text' className='password' name='password' id='getPassword' value={password} onChange={({ target }) => setPassword(target.value)} />
       <input type='submit' name='submit' id='submitForm' value='Submit' />
     </form>
   )
