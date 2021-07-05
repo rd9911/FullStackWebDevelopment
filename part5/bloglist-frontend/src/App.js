@@ -6,7 +6,6 @@ import CreateForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
-
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState('')
@@ -31,8 +30,6 @@ const App = () => {
 
   const loginRef = useRef()
   const blogRef = useRef()
-
-
 
   const login = async (userToLogin) => {
     try {

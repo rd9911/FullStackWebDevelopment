@@ -23,7 +23,7 @@ const CreateForm = ({ onBlogPost }) => {
 
   return (
     <div>
-            Create new
+      Create new
       <form onSubmit={postBlog}>
         title <input className = 'title' value={title} onChange={({ target }) => { setTitle(target.value)} } /><br />
         author <input className ='author' value={author} onChange={({ target }) => { setAuthor(target.value)} } /><br />

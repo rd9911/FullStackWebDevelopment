@@ -80,7 +80,7 @@ describe('Blog app', function() { //  discouraged to use use arrow functions (=>
                 cy.wrap(blogs[0]).contains('bye')
               })
           })
-          it.only('blogs are automatically re-sorted after licking like', function() {
+          it.only('blogs are automatically re-sorted after having new the most liked blog', function() {
             cy.get('.short-view')
               .then(blogs => {
                 cy.wrap(blogs[0]).contains('bye')
