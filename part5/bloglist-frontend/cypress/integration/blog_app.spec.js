@@ -6,7 +6,7 @@ describe('Blog app', function() { //  discouraged to use use arrow functions (=>
     cy.visit('http://localhost:3000')
   })
 
-  it('Login form is hsown', function() {
+  it('Login form is shown', function() {
     cy.contains('Login')
     cy.get('.log-in').click()
   })
