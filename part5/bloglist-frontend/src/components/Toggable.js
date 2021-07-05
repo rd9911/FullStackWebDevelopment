@@ -28,9 +28,6 @@ const Toggable = React.forwardRef((props, ref) => {
 })
 
 Toggable.displayName = 'Toggable'
-
-Toggable.propTypes = {
-  btnLabel: PropTypes.string.isRequired,
-}
+Toggable.propTypes = { btnLabel: PropTypes.string.isRequired }
 
 export default Toggable
