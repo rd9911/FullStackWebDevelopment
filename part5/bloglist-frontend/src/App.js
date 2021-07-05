@@ -101,9 +101,7 @@ const App = () => {
     <div>
       <div>
         <h3>{errorMessage}</h3>
-
         {user
-
           ? <div>
             <p>{user.username} logged in</p>
             <input type='button' className='logout' value='logout' onClick={logout} />
@@ -118,7 +116,6 @@ const App = () => {
               )}
             </div>
           </div>
-
           : <div>
             <h2>Login</h2>
             <Toggable btnLabel='log-in' ref={loginRef} >

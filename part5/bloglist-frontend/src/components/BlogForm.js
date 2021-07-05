@@ -31,7 +31,6 @@ const CreateForm = ({ onBlogPost }) => {
         <input type='submit' value='create' />
       </form>
     </div>
-
   )
 }
 
