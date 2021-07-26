@@ -19,7 +19,7 @@ const AnecdoteList = (props) => {
         setTimeout(() => {
             dispatch(createNotification(``))
         }, 5000)
-      }    
+      }
 
     return (
         <div>
