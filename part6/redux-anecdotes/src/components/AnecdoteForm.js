@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
+import { createNotification } from '../reducers/notificationReducer'
 
 
 const AnecdoteForm = (props) => {
@@ -9,6 +10,7 @@ const AnecdoteForm = (props) => {
         event.preventDefault()
         const anecdote = event.target.anecdote.value
         dispatch(createAnecdote(anecdote))
+        dispatch(createNotification(`<<${anecdote}>> is created!`))
       }
 
     return (
