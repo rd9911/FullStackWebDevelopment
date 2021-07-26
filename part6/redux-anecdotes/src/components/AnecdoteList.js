@@ -5,20 +5,19 @@ import { createNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = (props) => {
     const anecdotes = useSelector(state => {
+        console.log('state', state)
         if (state.filter) {
             return state.anecdotes.filter((anecdote) => anecdote.content.toLowerCase().includes(state.filter.toLowerCase()))
         }
         return state.anecdotes
     })
     const dispatch = useDispatch()
+    console.log(anecdotes)
 
-    const vote = (id, content) => {
+    const vote = (id, anecdote) => {
         console.log('vote', id)
-        dispatch(voteAnecdote(id))
-        dispatch(createNotification(`you liked "${content}"`))
-        setTimeout(() => {
-            dispatch(createNotification(``))
-        }, 5000)
+        dispatch(voteAnecdote(id, anecdote))
+        dispatch(createNotification(`you liked "${anecdote.content}"`, 5))
       }
 
     return (
@@ -31,7 +30,7 @@ const AnecdoteList = (props) => {
                 </div>
                 <div>
                     has {anecdote.votes}
-                    <button onClick={() => vote(anecdote.id, anecdote.content)}>vote</button>
+                    <button onClick={() => vote(anecdote.id, anecdote)}>vote</button>
                 </div>
                 </div>
             )}

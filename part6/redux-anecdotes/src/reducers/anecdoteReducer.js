@@ -1,22 +1,33 @@
-import { initialState, getId } from "../store"
+import { getId } from "../store"
+import anecdotesServices from "../services/anecdotesServices"
+import { createNotification } from "./notificationReducer"
 
-export const createAnecdote = (anecdote) => {
-  return {
-    type: 'anecdotes/addNew',
-    content: anecdote
+export const createAnecdote = (content, time) => {
+  return async dispatch => {
+    await anecdotesServices.createNew(content)
+    dispatch({
+      type: 'anecdotes/addNew',
+      content: content
+    })
   }
 }
-export const voteAnecdote = (id) => {
-  return {
-    type: 'anecdotes/vote',
-    anecdoteId: id
+export const voteAnecdote = (id, anecdote) => {
+  return async dispatch => {
+    await anecdotesServices.voteForAnecdote(id, anecdote)
+    dispatch({
+      type: 'anecdotes/vote',
+      anecdoteId: id
+    })
   }
 }
 
-export const initialize = (anecdotes) => {
-  return {
-    type: 'anecdotes/init',
-    anecdotes: anecdotes
+export const initialize = () => {
+  return async dispatch => {
+    const anecdotes = await anecdotesServices.getAll()
+    dispatch({
+      type: 'anecdotes/init',
+      anecdotes: anecdotes
+    })
   }
 }
 
