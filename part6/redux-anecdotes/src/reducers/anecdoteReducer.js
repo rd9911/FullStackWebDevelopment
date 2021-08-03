@@ -1,6 +1,5 @@
 import { getId } from "../store"
 import anecdotesServices from "../services/anecdotesServices"
-import { createNotification } from "./notificationReducer"
 
 export const createAnecdote = (content, time) => {
   return async dispatch => {
