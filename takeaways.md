@@ -39,3 +39,7 @@ Now we should separate our App() but right after this decision teh question come
 Notes about exporting functions. A file can't have more than one `default` export variable/function but can have multiple "normal" (`export const nameOfVar`) variables/functions. 
 
 presentational components, container component
+presentational components deal with how things look and container components deal with how things work (also containers accept components as props)
+
+ppp
+We learned about hooks (useSelector, useDispatch) but before hooks became convinient way of managing states there was connect(). It includes two types of parametres: mapStateToProps and mapDispatchToProps. The first (matchStateToState) does the work of useSelector and the second (mapDispatchToProps) is analogy of useDispatch. Basically connect() manages states by passing them as props to components.
