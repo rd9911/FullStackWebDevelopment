@@ -11,7 +11,8 @@ const CreateForm = ({ onBlogPost }) => {
     const blogToPost = {
       title: title,
       author: author,
-      url: url
+      url: url,
+      details: false
     }
     const postedBlog = await onBlogPost(blogToPost)
     if (postedBlog) {
