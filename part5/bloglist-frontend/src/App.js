@@ -1,134 +1,83 @@
-import React, { useEffect, useRef } from 'react'
-import Blog from './components/Blog'
+import React, { useRef } from 'react'
+import {
+  BrowserRouter as Router, Switch,Route,Link
+} from 'react-router-dom'
 import Login from './components/Login'
 import Toggable from './components/Toggable'
 import CreateForm from './components/BlogForm'
-import User from './components/User'
-import blogService from './services/blogs'
-import loginService from './services/login'
-import userServices from './services/users'
 
-import { notificationCreator } from './reducers/notificationReducer'
-import { blogCreator, blogLiker, blogRemover, blogsInitializer } from './reducers/blogsReducer'
-import { userLoginSetter } from './reducers/userLoginReducer userLoginReducer'
-import { usersInfoSetter } from './reducers/usersInfoReducer'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
+import BlogList from './components/BlogList'
+import UserList from './components/UserList'
+import Logout from './components/Logout'
+
+function Home() {
+  return (<div>Welcome</div>)
+}
 
 const App = () => {
-  const blogs = useSelector(state => state.blogs)
-  const users = useSelector(state => state.usersInfo)
-  const errorMessage = useSelector(state => state.notification)
-  const userLoggedIn = useSelector(state => state.userLogin)
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      dispatch( blogsInitializer(blogs))
-    )
-    userServices.getAll().then(users => dispatch( usersInfoSetter(users) ))
-  }, [])
-
-  useEffect(() => {
-    let isMounted = true
-    const loggedUserJSON = window.localStorage.getItem('loggedUserJSON')
-    if (isMounted && loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      dispatch(userLoginSetter(user))
-      blogService.setToken(user.token)
-    }
-    return () => { isMounted = false }
-  }, [])
+  const notification = useSelector(state => state.notification)
+  const userLoggedIn = useSelector(state => state.userLogged)
 
   const loginRef = useRef()
   const blogRef = useRef()
 
-  const login = async (userToLogin) => {
-    try {
-      loginRef.current.handleCreateBlogClick()
-      const loggedUser = await loginService.login(userToLogin) // services.login(username, passwordtel )
-      dispatch(userLoginSetter(loggedUser))
-      window.localStorage.setItem('loggedUserJSON', JSON.stringify(loggedUser))
-      return loggedUser
-    } catch(err) {
-      console.log(err)
-      dispatch(notificationCreator('invalid username or password'))
-      setTimeout(() => { dispatch(notificationCreator('')) }, 3000)
-    }
-  }
-  const logout = () => {
-    window.localStorage.removeItem('user')
-    window.localStorage.clear()
-    dispatch(userLoginSetter(''))
+  const login = () => {
+    loginRef.current.handleCreateBlogClick()
   }
 
-  const postBlog = async (blogToPost) => {
-    try {
-      blogRef.current.handleCreateBlogClick()
-      dispatch(blogCreator(blogToPost))
-      dispatch(notificationCreator(`a new blog ${blogToPost.title} by ${blogToPost.author}`))
-      setTimeout(() => { dispatch(notificationCreator('')) }, 3000)
-    } catch (error) {
-      dispatch(notificationCreator(error))
-      setTimeout(() => { dispatch(notificationCreator('')) }, 3000)
-    }
-  }
-
-  const like = async (blogId, blogToLike) => { // Chnage name of function
-    try {
-      dispatch(blogLiker(blogId))
-      dispatch(notificationCreator(`the blog ${blogToLike.title} is liked by ${userLoggedIn.username}`))
-      setTimeout(() => { dispatch(notificationCreator('')) }, 3000)
-    } catch(error) {
-      dispatch(notificationCreator(error))
-      setTimeout(() => dispatch(notificationCreator('')), 3000)
-    }
-  }
-
-  const removeBlog = async (blogId, blogToRemove) => {
-    const confirm = window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}?`)
-    if (confirm) {
-      try {
-        dispatch(blogRemover(blogId))
-        dispatch(notificationCreator(`${blogToRemove.title} was deleted by ${userLoggedIn.username}`))
-        setTimeout(() => dispatch(notificationCreator('')), 3000)
-      } catch(error) {
-        dispatch(notificationCreator('missing or invalid token.'))
-        setTimeout(() => dispatch(notificationCreator('')), 3000)
-      }
-    }
+  const postBlog = () => {
+    blogRef.current.handleCreateBlogClick()
   }
 
   return (
     <div>
-      <div>
-        <h3>{errorMessage}</h3>
-        {userLoggedIn
-          ? <div>
+      <h3>{notification}</h3>
+      {userLoggedIn
+        ? <Router>
+          <div>
             <p>{userLoggedIn.username} logged in</p>
-            <input type='button' className='logout' value='logout' onClick={logout} />
-            <Toggable btnLabel='create-blog' ref={blogRef} >
-              <CreateForm onBlogPost={postBlog} />
-            </Toggable>
+            <nav>
+              <ul>
+                <li><Link to='/'>Home</Link></li>
+                <li><Link to='/blog-list'>Blogs</Link></li>
+                <li><Link to='/user-list'>Users</Link></li>
+                <li><Link to='/post-blog'>Post</Link></li>
+                <li><Link to='/logout'>Logout</Link></li>
+              </ul>
+            </nav>
+          </div>
 
-            <div>
-              <h2>blogs</h2>
-              {blogs.sort((a, b) =>  b.likes - a.likes).map(blog =>
-                <Blog key={blog.id} blog={blog} onLikeBlog={like} onRemoveBlog={removeBlog} />
-              )}
-            </div>
-            <h1>Users</h1>
-            <div>
-              {users.map(user => <User key={user.id} user={user} />)}
-            </div>
-          </div>
-          : <div>
-            <h2>Login</h2>
-            <Toggable btnLabel='log-in' ref={loginRef} >
-              <Login onLogin={login} />
-            </Toggable>
-          </div>
-        }
-      </div>
+          <Switch>
+            <Route path='/blog-list/:id'>
+              <BlogList />
+            </Route>
+            <Route path='/blog-list'>
+              <BlogList />
+            </Route>
+            <Route path='/user-list'>
+              <UserList />
+            </Route>
+            <Route path='/post-blog'>
+              <Toggable btnLabel='create-blog' ref={blogRef} >
+                <CreateForm onBlogPost={postBlog} />
+              </Toggable>
+            </Route>
+            <Route path='/logout'>
+              <Logout />
+            </Route>
+            <Route path='/'>
+              <Home />
+            </Route>
+          </Switch>
+        </Router>
+        : <div>
+          <h2>Login</h2>
+          <Toggable btnLabel='log-in' ref={loginRef} >
+            <Login onLogin={login} />
+          </Toggable>
+        </div>
+      }
     </div>
   )
 }

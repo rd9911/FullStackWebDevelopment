@@ -1,6 +1,9 @@
 import React, { useState, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
 
+// change the Toggle so that it uses redux state. take off all the refs froom the app. Refactor the app so that everything was in its own componennt
+
+
 const Toggable = React.forwardRef((props, ref) => {
   const [formVisible, setFormVisible] = useState(false)
 

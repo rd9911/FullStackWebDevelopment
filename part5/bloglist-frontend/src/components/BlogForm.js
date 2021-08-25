@@ -1,24 +1,37 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
+import { notificationCreator } from '../reducers/notificationReducer'
+import { blogCreator } from '../reducers/blogsReducer'
 
 const CreateForm = ({ onBlogPost }) => {
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
+  const dispatch = useDispatch()
 
+  const clearForm = () => {
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
   const postBlog = async (event) => {
     event.preventDefault()
-    const blogToPost = {
-      title: title,
-      author: author,
-      url: url,
-      details: false
-    }
-    const postedBlog = await onBlogPost(blogToPost)
-    if (postedBlog) {
-      setTitle('')
-      setAuthor('')
-      setUrl('')
+    try {
+      onBlogPost()
+      const blogToPost = {
+        title: title,
+        author: author,
+        url: url,
+        details: false
+      }
+      dispatch(blogCreator(blogToPost))
+      dispatch(notificationCreator(`a new blog ${blogToPost.title} by ${blogToPost.author}`))
+      setTimeout(() => { dispatch(notificationCreator('')) }, 3000)
+      clearForm()
+    } catch (error) {
+      dispatch(notificationCreator(error))
+      setTimeout(() => { dispatch(notificationCreator('')) }, 3000)
     }
   }
 
