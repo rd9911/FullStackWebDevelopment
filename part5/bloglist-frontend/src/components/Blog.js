@@ -10,14 +10,12 @@ const Blog = ( props ) => {
   const dispatch = useDispatch()
   const id = useParams().id
   console.log(props.blogs)
-  let blog
-  if (id) {
-    console.log(id)
-    blog = props.blogs.find(blog => blog.id === id)
-    console.log(blog)
-  } else {blog
-    blog = props.blog
+  let blog = props.blogs.find(blog => blog.id === id)
+  console.log(blog)
+  if (!blog) {
+    return null
   }
+
 
   const removeBlog = async (blogId, blogToRemove) => {
     const confirm = window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}?`)
@@ -50,7 +48,6 @@ const Blog = ( props ) => {
         {blog.title} by {blog.author} on <a href={blog.url}>{blog.url}</a> likes {blog.likes}
         <button value='like' className='like' onClick={() => like(blog.id, blog)} >like</button>
         <button value='delete' className='delete' onClick={() => removeBlog(blog.id, blog)} >delete</button>
-        {/* <button value='hide' className='hide' onClick={handleChangeFullDetails} >hide</button> */}
       </div>
     </div>
   )

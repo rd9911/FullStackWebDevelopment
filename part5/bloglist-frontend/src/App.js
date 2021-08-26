@@ -15,6 +15,7 @@ import BlogList from './components/BlogList'
 import UserList from './components/UserList'
 import Logout from './components/Logout'
 import Blog from './components/Blog'
+import User from './components/User'
 
 function Home() {
   return (<div>Welcome</div>)
@@ -24,6 +25,7 @@ const App = () => {
   const notification = useSelector(state => state.notification)
   const userLoggedIn = useSelector(state => state.userLogged)
   const blogs = useSelector(state => state.blogs)
+  const users = useSelector(state => state.usersInfo)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -63,6 +65,9 @@ const App = () => {
           <Switch>
             <Route path='/blog-list/:id'>
               <Blog blogs={blogs}/>
+            </Route>
+            <Route path='/user-list/:id'>
+              <User users={users} />
             </Route>
             <Route path='/blog-list'>
               <BlogList />
