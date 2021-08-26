@@ -1,15 +1,20 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import {
   BrowserRouter as Router, Switch,Route,Link
 } from 'react-router-dom'
 import Login from './components/Login'
 import Toggable from './components/Toggable'
 import CreateForm from './components/BlogForm'
+import blogService from './services/blogs'
+import userServices from './services/users'
 
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { blogsInitializer } from './reducers/blogsReducer'
+import { usersInfoSetter } from './reducers/usersInfoReducer'
 import BlogList from './components/BlogList'
 import UserList from './components/UserList'
 import Logout from './components/Logout'
+import Blog from './components/Blog'
 
 function Home() {
   return (<div>Welcome</div>)
@@ -18,6 +23,13 @@ function Home() {
 const App = () => {
   const notification = useSelector(state => state.notification)
   const userLoggedIn = useSelector(state => state.userLogged)
+  const blogs = useSelector(state => state.blogs)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    blogService.getAll().then(blogs => dispatch( blogsInitializer(blogs) ))
+    userServices.getAll().then(users => dispatch( usersInfoSetter(users) ))
+  }, [])
 
   const loginRef = useRef()
   const blogRef = useRef()
@@ -50,7 +62,7 @@ const App = () => {
 
           <Switch>
             <Route path='/blog-list/:id'>
-              <BlogList />
+              <Blog blogs={blogs}/>
             </Route>
             <Route path='/blog-list'>
               <BlogList />

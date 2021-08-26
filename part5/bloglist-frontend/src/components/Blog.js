@@ -1,17 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
 // import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { blogRemover, blogLiker } from '../reducers/blogsReducer'
 import { notificationCreator } from '../reducers/notificationReducer'
-import { Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
-const Blog = ( { blog } ) => {
-  const [fullDetails, setFullDetails] = useState(false)
+const Blog = ( props ) => {
   const userLoggedIn = useSelector(state => state.userLogged)
   const dispatch = useDispatch()
-
-  const handleChangeFullDetails = () => {
-    setFullDetails(!fullDetails)
+  const id = useParams().id
+  console.log(props.blogs)
+  let blog
+  if (id) {
+    console.log(id)
+    blog = props.blogs.find(blog => blog.id === id)
+    console.log(blog)
+  } else {blog
+    blog = props.blog
   }
 
   const removeBlog = async (blogId, blogToRemove) => {
@@ -41,19 +46,12 @@ const Blog = ( { blog } ) => {
 
   return (
     <div>
-      {fullDetails
-        ?
-        <div className='detail-view'>
-          <Link to={`blog-list/${blog.id}`}>{blog.title} by {blog.author} on {blog.url} likes {blog.likes}</Link>
-          <button value='like' className='like' onClick={() => like(blog.id, blog)} >like</button>
-          <button value='delete' className='delete' onClick={() => removeBlog(blog.id, blog)} >delete</button>
-          <button value='hide' className='hide' onClick={handleChangeFullDetails} >hide</button>
-        </div>
-        :
-        <div className='short-view'>
-          <Link to={`blog-list/${blog.id}`}>{blog.title} by {blog.author}</Link>
-          <button value='view' className='view' onClick={handleChangeFullDetails} >view</button>
-        </div>}
+      <div className='detail-view'>
+        {blog.title} by {blog.author} on <a href={blog.url}>{blog.url}</a> likes {blog.likes}
+        <button value='like' className='like' onClick={() => like(blog.id, blog)} >like</button>
+        <button value='delete' className='delete' onClick={() => removeBlog(blog.id, blog)} >delete</button>
+        {/* <button value='hide' className='hide' onClick={handleChangeFullDetails} >hide</button> */}
+      </div>
     </div>
   )
 }
