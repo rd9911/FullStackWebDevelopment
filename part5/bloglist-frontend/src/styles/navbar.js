@@ -1,0 +1,1 @@
+export const horizontalNav = { 'display': 'inline', 'padding': '5px' }

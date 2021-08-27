@@ -16,6 +16,7 @@ import UserList from './components/UserList'
 import Logout from './components/Logout'
 import Blog from './components/Blog'
 import User from './components/User'
+import { horizontalNav } from './styles/navbar'
 
 function Home() {
   return (<div>Welcome</div>)
@@ -50,14 +51,14 @@ const App = () => {
       {userLoggedIn
         ? <Router>
           <div>
-            <p>{userLoggedIn.username} logged in</p>
             <nav>
               <ul>
-                <li><Link to='/'>Home</Link></li>
-                <li><Link to='/blog-list'>Blogs</Link></li>
-                <li><Link to='/user-list'>Users</Link></li>
-                <li><Link to='/post-blog'>Post</Link></li>
-                <li><Link to='/logout'>Logout</Link></li>
+                <li style={horizontalNav}><Link to='/'>Home</Link></li>
+                <li style={horizontalNav}><Link to='/blog-list'>Blogs</Link></li>
+                <li style={horizontalNav}><Link to='/user-list'>Users</Link></li>
+                <li style={horizontalNav}><Link to='/post-blog'>Post</Link></li>
+                {userLoggedIn.username} logged in
+                <li style={horizontalNav}><Link to='/logout'>Logout</Link></li>
               </ul>
             </nav>
           </div>

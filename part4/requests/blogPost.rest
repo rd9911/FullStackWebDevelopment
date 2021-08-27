@@ -1,10 +1,7 @@
-post http://localhost:3003/api/blogs/
+put http://localhost:3003/api/blogs/6127df7ef9497d6cc275943e/comments
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkZyYW56IEthZmthIiwiaWQiOiI2MGNlYjdhMWRiYzA3NzM0ZjA2OTU4Y2MiLCJpYXQiOjE2MjQxODIzNjN9.3hCWQnYR_7qbkqhRyOvX6ZIyNpyqmdQVtUdyrI72hoI
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkZyYW56IEthZmthIiwiaWQiOiI2MTFiYzc0YmQxY2UyYzU3MDM0Y2JlOTMiLCJpYXQiOjE2MzAwMDMwMjh9.b54MG_4KsL96L2YH3aWIOHAycewU6Hf9FNQ_6NhukGs
 
 {
-    "title": "ratatuy",
-    "author": "2pac",
-    "url": "2p.com",
-    "likes": 7
+    "comment": "best"
 }

@@ -46,4 +46,19 @@ const deleteBlog = async (blogId) => {
   }
 }
 
-export default { getAll, create, setToken, likeBlog, deleteBlog }
+const commentOnBlog = async (comment, blogId) => {
+  console.log('comment')
+  if (token) {
+    const config = { headers: { Authorization: token, 'Access-Control-Allow-Origin': '*' } }
+    const response = await axios({
+      method: 'put',
+      url: `${baseUrl}/${blogId}/comments`,
+      headers: config,
+      data: { comment: comment }
+    })
+    console.log(response)
+    return response.data
+  }
+}
+
+export default { getAll, create, setToken, likeBlog, deleteBlog, commentOnBlog }
