@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import { notificationCreator } from '../reducers/notificationReducer'
 import { userLoginSetter } from '../reducers/userLoginReducer userLoginReducer'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 
-
-const Login = ({ onLogin }) => {
+const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
@@ -30,12 +28,9 @@ const Login = ({ onLogin }) => {
       password: password
     }
     try {
-      onLogin(userToLogin)
       const loggedUser = await loginService.login(userToLogin) // services.login(username, passwordtel )
-      console.log(loggedUser)
       dispatch(userLoginSetter(loggedUser))
       window.localStorage.setItem('loggedUserJSON', JSON.stringify(loggedUser))
-      return loggedUser
     } catch(err) {
       console.log(err)
       dispatch(notificationCreator('invalid username or password'))
@@ -57,8 +52,5 @@ const Login = ({ onLogin }) => {
   )
 }
 
-Login.propTypes = {
-  onLogin: PropTypes.func.isRequired
-}
 
 export default Login

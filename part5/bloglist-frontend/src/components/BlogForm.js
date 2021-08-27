@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import PropTypes from 'prop-types'
 import { notificationCreator } from '../reducers/notificationReducer'
 import { blogCreator } from '../reducers/blogsReducer'
 
-const CreateForm = ({ onBlogPost }) => {
+const CreateForm = () => {
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
@@ -18,7 +17,6 @@ const CreateForm = ({ onBlogPost }) => {
   const postBlog = async (event) => {
     event.preventDefault()
     try {
-      onBlogPost()
       const blogToPost = {
         title: title,
         author: author,
@@ -46,10 +44,6 @@ const CreateForm = ({ onBlogPost }) => {
       </form>
     </div>
   )
-}
-
-CreateForm.propTypes = {
-  onBlogPost: PropTypes.func.isRequired
 }
 
 export default CreateForm

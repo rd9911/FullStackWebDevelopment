@@ -1,9 +1,8 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import {
   BrowserRouter as Router, Switch,Route,Link
 } from 'react-router-dom'
 import Login from './components/Login'
-import Toggable from './components/Toggable'
 import CreateForm from './components/BlogForm'
 import blogService from './services/blogs'
 import userServices from './services/users'
@@ -11,9 +10,9 @@ import userServices from './services/users'
 import { useDispatch, useSelector } from 'react-redux'
 import { blogsInitializer } from './reducers/blogsReducer'
 import { usersInfoSetter } from './reducers/usersInfoReducer'
+import { userLoginSetter } from './reducers/userLoginReducer userLoginReducer'
 import BlogList from './components/BlogList'
 import UserList from './components/UserList'
-import Logout from './components/Logout'
 import Blog from './components/Blog'
 import User from './components/User'
 import { horizontalNav } from './styles/navbar'
@@ -34,15 +33,10 @@ const App = () => {
     userServices.getAll().then(users => dispatch( usersInfoSetter(users) ))
   }, [])
 
-  const loginRef = useRef()
-  const blogRef = useRef()
-
-  const login = () => {
-    loginRef.current.handleCreateBlogClick()
-  }
-
-  const postBlog = () => {
-    blogRef.current.handleCreateBlogClick()
+  const logout = () => {
+    window.localStorage.removeItem('user')
+    window.localStorage.clear()
+    dispatch(userLoginSetter(''))
   }
 
   return (
@@ -58,7 +52,7 @@ const App = () => {
                 <li style={horizontalNav}><Link to='/user-list'>Users</Link></li>
                 <li style={horizontalNav}><Link to='/post-blog'>Post</Link></li>
                 {userLoggedIn.username} logged in
-                <li style={horizontalNav}><Link to='/logout'>Logout</Link></li>
+                <li style={horizontalNav}><button onClick={logout}>Logout</button></li>
               </ul>
             </nav>
           </div>
@@ -77,12 +71,7 @@ const App = () => {
               <UserList />
             </Route>
             <Route path='/post-blog'>
-              <Toggable btnLabel='create-blog' ref={blogRef} >
-                <CreateForm onBlogPost={postBlog} />
-              </Toggable>
-            </Route>
-            <Route path='/logout'>
-              <Logout />
+              <CreateForm />
             </Route>
             <Route path='/'>
               <Home />
@@ -91,9 +80,7 @@ const App = () => {
         </Router>
         : <div>
           <h2>Login</h2>
-          <Toggable btnLabel='log-in' ref={loginRef} >
-            <Login onLogin={login} />
-          </Toggable>
+          <Login />
         </div>
       }
     </div>

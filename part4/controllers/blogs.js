@@ -51,7 +51,6 @@ blogRouter.put('/:id', async (req, res) => {
 });
 
 blogRouter.put('/:id/comments', async (req, res) => {
-    console.log(req.body, req.params.id);
     const commentedBlog = await Blog.findOneAndUpdate(
         { _id: req.params.id }, { $push: { comments: req.body.comment}});
     console.log(commentedBlog);
