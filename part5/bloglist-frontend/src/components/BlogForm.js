@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { notificationCreator } from '../reducers/notificationReducer'
 import { blogCreator } from '../reducers/blogsReducer'
+import { useHistory } from 'react-router-dom'
 
 const CreateForm = () => {
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const clearForm = () => {
     setTitle('')
@@ -27,6 +29,7 @@ const CreateForm = () => {
       dispatch(notificationCreator(`a new blog ${blogToPost.title} by ${blogToPost.author}`))
       setTimeout(() => { dispatch(notificationCreator('')) }, 3000)
       clearForm()
+      history.push('/blog-list')
     } catch (error) {
       dispatch(notificationCreator(error))
       setTimeout(() => { dispatch(notificationCreator('')) }, 3000)

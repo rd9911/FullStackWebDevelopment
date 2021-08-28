@@ -4,11 +4,14 @@ import { notificationCreator } from '../reducers/notificationReducer'
 import { userLoginSetter } from '../reducers/userLoginReducer userLoginReducer'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import { TextField, Button } from '@material-ui/core'
+import { useHistory } from 'react-router-dom'
 
 const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
+  const history = useHistory()
 
   useEffect(() => {
     let isMounted = true
@@ -19,7 +22,7 @@ const Login = () => {
       blogService.setToken(user.token)
     }
     return () => { isMounted = false }
-  }, [])
+  }, [dispatch])
 
   const loginSubmit = async (event) => {
     event.preventDefault()
@@ -31,6 +34,7 @@ const Login = () => {
       const loggedUser = await loginService.login(userToLogin) // services.login(username, passwordtel )
       dispatch(userLoginSetter(loggedUser))
       window.localStorage.setItem('loggedUserJSON', JSON.stringify(loggedUser))
+      history.push('/')
     } catch(err) {
       console.log(err)
       dispatch(notificationCreator('invalid username or password'))
@@ -43,10 +47,11 @@ const Login = () => {
 
   return (
     <div>
+      <h2>Login</h2>
       <form onSubmit={loginSubmit}>
-        username <input type='text' className='username' name='username' id='getUsername' value={username} onChange={({ target }) => setUsername(target.value)} /><br />
-        password <input type='text' className='password' name='password' id='getPassword' value={password} onChange={({ target }) => setPassword(target.value)} />
-        <input type='submit' name='submit' id='submitForm' value='Submit' />
+        <TextField required label='Username' variant='filled' size='small' id='getUsername' onChange={({ target }) => setUsername(target.value)} /><br />
+        <TextField required label='Password' variant='filled' size='small' type='password' id='getPassword' onChange={({ target }) => setPassword(target.value)} />
+        <Button variant='contained' color='primary' type='submit' id='submitForm' >Submit</Button>
       </form>
     </div>
   )
