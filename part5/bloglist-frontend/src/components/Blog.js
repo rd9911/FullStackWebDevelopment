@@ -21,11 +21,9 @@ const Blog = ( props ) => {
     if (confirm) {
       try {
         dispatch(blogRemover(blogId))
-        dispatch(notificationCreator(`${blogToRemove.title} was deleted by ${userLoggedIn.username}`))
-        setTimeout(() => dispatch(notificationCreator('')), 3000)
+        dispatch(notificationCreator(`${blogToRemove.title} was deleted by ${userLoggedIn.username}`, 3))
       } catch(error) {
-        dispatch(notificationCreator('missing or invalid token.'))  // made these things as one action creator with paramters for the message and time
-        setTimeout(() => dispatch(notificationCreator('')), 3000)
+        dispatch(notificationCreator('missing or invalid token.', 3))  // made these things as one action creator with paramters for the message and time
       }
     }
   }
@@ -33,11 +31,9 @@ const Blog = ( props ) => {
   const like = async (blogId, blogToLike) => { // Chnage name of function
     try {
       dispatch(blogLiker(blogId))
-      dispatch(notificationCreator(`the blog ${blogToLike.title} is liked by ${userLoggedIn.username}`))
-      setTimeout(() => { dispatch(notificationCreator('')) }, 3000)
+      dispatch(notificationCreator(`the blog ${blogToLike.title} is liked by ${userLoggedIn.username}`, 3))
     } catch(error) {
-      dispatch(notificationCreator(error))
-      setTimeout(() => dispatch(notificationCreator('')), 3000)
+      dispatch(notificationCreator(error, 3))
     }
   }
 
@@ -45,11 +41,9 @@ const Blog = ( props ) => {
     console.log(comment)
     try {
       dispatch(blogCommentor(comment, blogToComment.id))
-      dispatch(notificationCreator(`The use ${userLoggedIn.username} has commented on the blog ${blogToComment.title}: ${comment}`))
-      setTimeout(() => dispatch(notificationCreator(''), 3000))
+      dispatch(notificationCreator(`The use ${userLoggedIn.username} has commented on the blog ${blogToComment.title}: ${comment}`, 3))
     } catch (error) {
-      dispatch(notificationCreator(error))
-      setTimeout(() => dispatch(notificationCreator('')), 3000)
+      dispatch(notificationCreator(error, 3))
     }
 
   }

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { notificationCreator } from '../reducers/notificationReducer'
 import { userLoginSetter } from '../reducers/userLoginReducer userLoginReducer'
 import loginService from '../services/login'
-import blogService from '../services/blogs'
 import { TextField, Button } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 
@@ -12,17 +11,6 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
   const history = useHistory()
-
-  useEffect(() => {
-    let isMounted = true
-    const loggedUserJSON = window.localStorage.getItem('loggedUserJSON')
-    if (isMounted && loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      dispatch(userLoginSetter(user))
-      blogService.setToken(user.token)
-    }
-    return () => { isMounted = false }
-  }, [dispatch])
 
   const loginSubmit = async (event) => {
     event.preventDefault()
@@ -34,11 +22,11 @@ const Login = () => {
       const loggedUser = await loginService.login(userToLogin) // services.login(username, passwordtel )
       dispatch(userLoginSetter(loggedUser))
       window.localStorage.setItem('loggedUserJSON', JSON.stringify(loggedUser))
+      dispatch(notificationCreator(`${loggedUser.username} has logged in`, 3))
       history.push('/')
     } catch(err) {
       console.log(err)
-      dispatch(notificationCreator('invalid username or password'))
-      setTimeout(() => { dispatch(notificationCreator('')) }, 3000)
+      dispatch(notificationCreator('invalid username or password', 3))
     }
     setUsername('')  // GETTING WARNING. FIX IT!!!
     setPassword('')

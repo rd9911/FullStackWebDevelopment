@@ -1,5 +1,11 @@
-export const notificationCreator = (message) => {
+export const notificationCreator = (message, time) => {
   return async dispatch => {
+    setTimeout(() => {
+      dispatch({
+        type:'bloglist/create-notification',
+        notification: ''
+      })
+    }, time * 1000)
     dispatch({
       type: 'bloglist/create-notification',
       notification: message
