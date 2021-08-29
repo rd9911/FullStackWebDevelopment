@@ -46,7 +46,7 @@ const CreateForm = () => {
         <TextField required disabled={loginChecker()} variant='filled' label='Title'  className = 'title' value={title} onChange={({ target }) => { setTitle(target.value)} } /><br />
         <TextField required disabled={loginChecker()} variant='filled' label='Author'  className ='author' value={author} onChange={({ target }) => { setAuthor(target.value)} } /><br />
         <TextField required disabled={loginChecker()} variant='filled' label='Link'  className='url' value={url} onChange={({ target }) => { setUrl(target.value)} } /><br />
-        <Button type='submit' variant='contained' color='primary' size='small'>Publish</Button>
+        <Button disabled={loginChecker()} type='submit' variant='contained' color='primary' size='small'>Publish</Button>
       </form>
     </div>
   )
