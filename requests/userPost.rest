@@ -1,0 +1,9 @@
+post http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "Franz Kafka",
+    "name": "Franz",
+    "password": "abc123",
+    "blogs": []
+}

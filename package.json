@@ -1,0 +1,53 @@
+{
+  "name": "part4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": "15.12.0",
+    "npm": "7.10"
+  },
+  "scripts": {
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
+    "start:test": "cross-env NODE_ENV=test node index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "lint": "npx eslint",
+    "build-ui": "rm -rf build && cd ../part5/bloglist-frontend && npm run build && cd .. && cp -r bloglist-frontend/build ../part4"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^10.0.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "http": "*",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.13",
+    "mongoose-unique-validator": "^2.0.3", 
+    "morgan": "^1.10.0",
+    "nanoid": "^3.1.23",
+    "nodemon": "^2.0.7",
+    "npm": "7.10",
+    "prop-types": "^15.7.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.28.0",
+    "eslint-plugin-jest": "^24.3.6",
+    "jest": "^27.0.4",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.3"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
