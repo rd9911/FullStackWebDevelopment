@@ -1,5 +1,6 @@
 import express from 'express';
 import patientServices from '../services/patientsServices';
+import validateNewPatient from '../utils';
 const pateientsRouter = express.Router();
 
 pateientsRouter.get('/', (_req, res) => {
@@ -7,8 +8,10 @@ pateientsRouter.get('/', (_req, res) => {
     res.send(result);
 });
 
-pateientsRouter.post('/', (_req, res) => {
-    res.send('Post');
+pateientsRouter.post('/', (req, res) => {
+    const newPatient = validateNewPatient(req.body);
+    const addedPatient = patientServices.postPatientEntry(newPatient);
+    res.send(addedPatient);
 });
 
 export default pateientsRouter;

@@ -1,6 +1,7 @@
 import { PatientEntry } from '../src/types/patientsTypes';
+import validateNewPatient from '../src/utils';
 
-export const patientData: Array<PatientEntry> = [
+const data = [
     {
         "id": "d2773336-f723-11e9-8f0b-362b9e155667",
         "name": "John McClane",
@@ -43,3 +44,10 @@ export const patientData: Array<PatientEntry> = [
     }
 ];
 
+const patientsData: PatientEntry [] = data.map(patient => {
+    const correctedPatientsDataType = validateNewPatient(patient) as PatientEntry;
+    correctedPatientsDataType.id = patient.id;
+    return correctedPatientsDataType;
+});
+
+export default patientsData;

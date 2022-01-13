@@ -1,5 +1,5 @@
 import express from 'express';
-import patientsRouter from './routes/patients';
+import patientsRouter from './routes/patientsRouter';
 import diagnosesRouter from './routes/diagnoseRoute';
 import cors from 'cors';
 const app = express();
