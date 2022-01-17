@@ -16,6 +16,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, us
 app.use(cors());
 app.use(express.json());
 app.use(middlewares.requestLogger);
+app.use(express.static('build'));
 
 app.use('/api/blogs',  middlewares.userExtractor, blogRouter);
 app.use('/api/users', userRouter);
