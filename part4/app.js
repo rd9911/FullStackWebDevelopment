@@ -10,12 +10,14 @@ const middlewares = require('./utils/middleware');
 const configs = require('./utils/config');
 
 const mongoUrl = configs.mongodbUri;
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true });
+console.log(typeof mongoUrl);
+mongoose.connect(String(mongoUrl), { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true });
 
 
 app.use(cors());
 app.use(express.json());
 app.use(middlewares.requestLogger);
+app.use(express.static('build'));
 
 app.use('/api/blogs',  middlewares.userExtractor, blogRouter);
 app.use('/api/users', userRouter);
