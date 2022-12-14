@@ -35,6 +35,7 @@ const CreateForm = () => {
       dispatch(notificationCreator(`a new blog ${blogToPost.title} by ${blogToPost.author}`, 3))
       clearForm()
       history.push('/blog-list')
+      history.go(0)
     } catch (error) {
       dispatch(notificationCreator(error, 3))
     }

@@ -38,7 +38,7 @@ const Blog = ( props ) => {
   }
 
   const onComment = (comment, blogToComment) => {
-    console.log(comment)
+    console.log(blogToComment)
     try {
       dispatch(blogCommentor(comment, blogToComment.id))
       dispatch(notificationCreator(`The use ${userLoggedIn.username} has commented on the blog ${blogToComment.title}: ${comment}`, 3))
